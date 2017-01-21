@@ -9,7 +9,9 @@ public class RadioControls : MonoBehaviour
     const float sfRadioIndicatorStepDistance = 0.125f;
     const float sfAnimationSpeed = 5.0f;
 
-    uint muChannel = 0;
+    public ConversationManager xConversationManager;
+
+    int miChannel = 0;
     const uint suMaxChannels = 24;
     GameObject mxKnob;
     GameObject mxRadioIndicator;
@@ -30,38 +32,43 @@ public class RadioControls : MonoBehaviour
     {
         if (mxKnob && mxRadioIndicator)
         {
-            if (Input.GetButtonDown("Channel Down") && muChannel > 0)
+            if (Input.GetButtonDown("Channel Down") && miChannel > 0)
             {
-                muChannel--;
+                miChannel--;
             }
 
-            if (Input.GetButtonDown("Channel Up") && muChannel < suMaxChannels - 1)
+            if (Input.GetButtonDown("Channel Up") && miChannel < suMaxChannels - 1)
             {
-                muChannel++;
+                miChannel++;
             }
         }
 
         float fTimeDelta = Time.deltaTime * sfAnimationSpeed;
 
-        if (mfChannelTransition < muChannel - 0.05f)
+        if (mfChannelTransition < miChannel - 0.05f)
         {
 
             mxKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle * fTimeDelta, 0));
             mxRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance * fTimeDelta, 0, 0));
             mfChannelTransition += fTimeDelta;
         }        
-        else if ( mfChannelTransition > muChannel + 0.05f)
+        else if ( mfChannelTransition > miChannel + 0.05f)
         {
             mxKnob.transform.Rotate(new Vector3(0, -sfKnobStepRotationAngle * fTimeDelta, 0));
             mxRadioIndicator.transform.Translate(new Vector3(-sfRadioIndicatorStepDistance * fTimeDelta, 0, 0));
             mfChannelTransition -= fTimeDelta;
 
         }
-        else if ( mfChannelTransition != muChannel)
+        else if ( mfChannelTransition != miChannel)
         {
-            mxKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle * (mfChannelTransition - muChannel), 0));
-            mxRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance * (mfChannelTransition - muChannel), 0, 0));
-            mfChannelTransition = muChannel;
+            mxKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle * (mfChannelTransition - miChannel), 0));
+            mxRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance * (mfChannelTransition - miChannel), 0, 0));
+            mfChannelTransition = miChannel;
+        }
+
+        if(xConversationManager != null)
+        {
+            xConversationManager.LoadConversation(miChannel);
         }
     }
 }

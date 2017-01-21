@@ -4,11 +4,30 @@ using UnityEngine;
 
 public class ConversationManager : MonoBehaviour {
 
-	Conversation[] aConversations;
+	List<AudioSource> maConversations;
+
+	int iPlayingConversation;
+	
 	// Use this for initialization
 	void Start () {
-		aConversations = (Conversation[]) Resources.FindObjectsOfTypeAll(typeof(Conversation));
-		LoadConversation(1, 1);
+		LoadConversations((Conversation[]) Resources.FindObjectsOfTypeAll(typeof(Conversation)));
+		print("Loaded " + maConversations.Count + " conversations");
+		//LoadConversation(1);
+		iPlayingConversation = -1;
+	}
+
+	void LoadConversations(Conversation[] aConversations)
+	{
+		maConversations = new List<AudioSource>();
+		print("Loading from " + aConversations.Length);
+		foreach(Conversation xConvo in aConversations)
+		{
+			GameObject xAudioSourceObject = new GameObject();
+			AudioSource xAudioSource = xAudioSourceObject.AddComponent<AudioSource>();
+			xAudioSource.mute = true;
+			maConversations.Add(xAudioSource);
+			StartCoroutine(PlayConversation(xConvo, xAudioSource));
+		}
 	}
 	
 	// Update is called once per frame
@@ -16,17 +35,29 @@ public class ConversationManager : MonoBehaviour {
 		
 	}
 
-	void LoadConversation(int iHouseNumber, int iDay)
+	public void LoadConversation(int iHouseNumber)
 	{
-		Conversation xConversation = aConversations[iHouseNumber - 1];
-		StartCoroutine(PlayConversation(xConversation));
+		if(iHouseNumber != iPlayingConversation)
+		{
+			if(iPlayingConversation != -1)
+			{
+				maConversations[iPlayingConversation].mute = true;
+			}
+			if(iHouseNumber < maConversations.Count)
+			{
+				maConversations[iHouseNumber].mute = false;
+				iPlayingConversation = iHouseNumber;
+			}
+		
+		}
 	}
 
-	IEnumerator PlayConversation(Conversation xConversation) 
+	IEnumerator PlayConversation(Conversation xConversation, AudioSource xSource) 
 	{
 	 	foreach(AudioClip statement in xConversation.aConversation)
 	 	{
-	 		AudioSource.PlayClipAtPoint(statement, Vector3.zero);
+	 		xSource.clip = statement;
+	 		xSource.Play();
 	 		yield return new WaitForSeconds(statement.length);
 	 	}
 	}
