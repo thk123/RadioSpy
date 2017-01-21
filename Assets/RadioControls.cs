@@ -5,39 +5,70 @@ using UnityEngine;
 public class RadioControls : MonoBehaviour
 {
 
-    const float sfKnobStepRotationAngle = 10.0f;
-    const float sfRadioIndicatorStepDistance = 0.5f;
+    const float sfKnobStepRotationAngle = 5.0f;
+    const float sfRadioIndicatorStepDistance = 0.125f;
+    const float sfAnimationSpeed = 5.0f;
 
-    uint muChannel = 0;
-    const uint suMaxChannels = 6; 
+    public ConversationManager xConversationManager;
 
-	// Use this for initialization
-	void Start ()
+    int miChannel = 0;
+    const uint suMaxChannels = 24;
+    GameObject mxKnob;
+    GameObject mxRadioIndicator;
+
+    float mfChannelTransition = 0;
+
+
+    // Use this for initialization
+    void Start ()
     {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
+        mxKnob = GameObject.Find("Knob");
+        mxRadioIndicator = GameObject.Find("RadioIndicator");
 
-        GameObject xKnob = GameObject.Find("Knob");
-        GameObject xRadioIndicator = GameObject.Find("RadioIndicator");
-        if (xKnob)
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (mxKnob && mxRadioIndicator)
         {
-            if (Input.GetButtonDown("Channel Down") && muChannel > 0)
+            if (Input.GetButtonDown("Channel Down") && miChannel > 0)
             {
-                xKnob.transform.Rotate(new Vector3(0, -sfKnobStepRotationAngle, 0));
-                xRadioIndicator.transform.Translate(new Vector3(-sfRadioIndicatorStepDistance, 0, 0));
-                muChannel--;
+                miChannel--;
             }
 
-            if (Input.GetButtonDown("Channel Up") && muChannel < suMaxChannels - 1 )
+            if (Input.GetButtonDown("Channel Up") && miChannel < suMaxChannels - 1)
             {
-                xKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle, 0));
-                xRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance, 0, 0));
-                muChannel++;
+                miChannel++;
             }
         }
-	}
+
+        float fTimeDelta = Time.deltaTime * sfAnimationSpeed;
+
+        if (mfChannelTransition < miChannel - 0.05f)
+        {
+
+            mxKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle * fTimeDelta, 0));
+            mxRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance * fTimeDelta, 0, 0));
+            mfChannelTransition += fTimeDelta;
+        }        
+        else if ( mfChannelTransition > miChannel + 0.05f)
+        {
+            mxKnob.transform.Rotate(new Vector3(0, -sfKnobStepRotationAngle * fTimeDelta, 0));
+            mxRadioIndicator.transform.Translate(new Vector3(-sfRadioIndicatorStepDistance * fTimeDelta, 0, 0));
+            mfChannelTransition -= fTimeDelta;
+
+        }
+        else if ( mfChannelTransition != miChannel)
+        {
+            mxKnob.transform.Rotate(new Vector3(0, sfKnobStepRotationAngle * (mfChannelTransition - miChannel), 0));
+            mxRadioIndicator.transform.Translate(new Vector3(sfRadioIndicatorStepDistance * (mfChannelTransition - miChannel), 0, 0));
+            mfChannelTransition = miChannel;
+        }
+
+        if(xConversationManager != null)
+        {
+            xConversationManager.LoadConversation(miChannel);
+        }
+    }
 }
