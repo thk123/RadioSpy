@@ -47,7 +47,6 @@ public class TwineManager : MonoBehaviour {
 
 			if(xMatch.Success)
 			{
-                print("Looking at passage: " + sPassageName);
 				int iDayOfPassage = System.Int32.Parse(xMatch.Groups["day"].Value);
 				if(iDay == iDayOfPassage)
 				{
