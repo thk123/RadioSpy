@@ -10,6 +10,7 @@ public class TwineManager : MonoBehaviour {
     int miCurrentDay;
 
     public ConversationManager mConversationManager;
+    public CurrentRoomRadioController mCurrentRoomController;
 
 	void Start () {
         miCurrentDay = 1;
@@ -22,8 +23,16 @@ public class TwineManager : MonoBehaviour {
 
         if(mConversationManager)
         {
-            var allConversations = dRevConvs.Select(xConv => xConv.Value);
-            mConversationManager.LoadConversations(allConversations.ToArray());
+        	foreach(KeyValuePair<string, Conversation> kvpConv in dRevConvs)
+        	{
+            	int iChannel = mConversationManager.LoadConversation(kvpConv.Value);
+
+            	if(mCurrentRoomController)
+        		{
+    				print("Reegistering room " + kvpConv.Key + "  " + iChannel.ToString());
+        			mCurrentRoomController.RegisterChannel(iChannel, "Flat 2", kvpConv.Key);
+    	    	}
+        	}
         }
 
         ++miCurrentDay;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConversationManager : MonoBehaviour {
 
-	List<AudioSource> maConversations;
+	List<AudioSource> maConversations = new List<AudioSource
 
 	int iPlayingConversation;
 	
@@ -13,18 +13,15 @@ public class ConversationManager : MonoBehaviour {
 		iPlayingConversation = -1;
 	}
 
-	public void LoadConversations(Conversation[] aConversations)
+	public int LoadConversation(Conversation xConvo)
 	{
-		maConversations = new List<AudioSource>();
-		print("Loading from " + aConversations.Length);
-		foreach(Conversation xConvo in aConversations)
-		{
-			GameObject xAudioSourceObject = new GameObject();
-			AudioSource xAudioSource = xAudioSourceObject.AddComponent<AudioSource>();
-			xAudioSource.mute = true;
-			maConversations.Add(xAudioSource);
-			StartCoroutine(PlayConversation(xConvo, xAudioSource));
-		}
+		GameObject xAudioSourceObject = new GameObject();
+		AudioSource xAudioSource = xAudioSourceObject.AddComponent<AudioSource>();
+		xAudioSource.mute = true;
+		maConversations.Add(xAudioSource);
+		StartCoroutine(PlayConversation(xConvo, xAudioSource));
+
+		return maConversations.Count - 1;
 	}
 	
 	// Update is called once per frame

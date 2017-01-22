@@ -10,6 +10,7 @@ public class RadioControls : MonoBehaviour
     const float sfAnimationSpeed = 5.0f;
 
     public ConversationManager xConversationManager;
+    public CurrentRoomRadioController xChannelDisplayer;
 
     int miChannel = 0;
     const uint suMaxChannels = 24;
@@ -69,6 +70,10 @@ public class RadioControls : MonoBehaviour
         if(xConversationManager != null)
         {
             xConversationManager.TuneInToConversation(miChannel);
+            if(xChannelDisplayer != null)
+            {
+                xChannelDisplayer.DisplayChannel(miChannel);
+            }
         }
     }
 }
