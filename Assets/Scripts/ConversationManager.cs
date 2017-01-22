@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConversationManager : MonoBehaviour {
 
-	List<AudioSource> maConversations = new List<AudioSource
+	List<AudioSource> maConversations = new List<AudioSource>();
 
 	int iPlayingConversation;
 	
