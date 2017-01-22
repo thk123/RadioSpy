@@ -121,6 +121,7 @@ public class TwineManager : MonoBehaviour {
                 {
                     Debug.LogError(index);
                 }
+                ++index;
             }
         }
         List<AudioClip> aAllClips = new List<AudioClip>();
