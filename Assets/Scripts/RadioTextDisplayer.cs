@@ -8,9 +8,10 @@ public class RadioTextDisplayer : MonoBehaviour {
 	public TextMesh Line2;
 	public int iMaxLength = 20;
 	public float fScrollPeriod = 0.5f;
+	public float fInitialPause = 2.0f;
 	// Use this for initialization
 	void Start () {
-		DisplayText("Title", "abcbasjdhaskdhakdhakdhakdakdhajshdk");
+
 	}
 	
 	// Update is called once per frame
@@ -18,7 +19,7 @@ public class RadioTextDisplayer : MonoBehaviour {
 		
 	}
 
-	void DisplayText(string sTitle, string sLine)
+	public void DisplayText(string sTitle, string sLine)
 	{
 		StopAllCoroutines();
 		ApplyText(sTitle, Line1);
@@ -48,7 +49,7 @@ public class RadioTextDisplayer : MonoBehaviour {
 			// If we are at the start, allow a little longer to read
 			if(iPos == 0)
 			{
-				yield return new WaitForSeconds(fScrollPeriod * 2.0f);
+				yield return new WaitForSeconds(fInitialPause);
 			}
 			yield return new WaitForSeconds(fScrollPeriod);
 
