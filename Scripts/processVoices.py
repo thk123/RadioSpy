@@ -22,6 +22,8 @@ def readFile(conversationName):
 	if (len(sys.argv) > 1):
 		fileName = sys.argv[1]
 	
+	fileNameStripped = fileName.split('.')
+	
 	lines = []
 	currentConversationName = conversationName
 	f = open('../TwineSrc/'+fileName,'r')
@@ -52,11 +54,11 @@ def readFile(conversationName):
 	blurbCount = 1
 	for blurb in lines:
 		if ( blurb[2] != previousConversationName):
-			call ("mkdir ..\\Assets\\Audio\\Dialogue\\"+blurb[2], shell=True)
+			call ("mkdir ..\\Assets\\Audio\\Dialogue\\"+fileNameStripped[0]+'\\'+blurb[2], shell=True)
 			previousConversationName = blurb[2]
 			blurbCount=1
 		#print(blurb)
-		executeLine = espeakPath+" "+voiceSettings[blurb[0]]+" -w ../Assets/Audio/Dialogue/"+blurb[2]+"/"+str(blurbCount).zfill(2)+".wav \""+blurb[1]+ "\""
+		executeLine = espeakPath+" "+voiceSettings[blurb[0]]+" -w ../Assets/Audio/Dialogue/"+fileNameStripped[0]+'/'+blurb[2]+"/"+str(blurbCount).zfill(2)+".wav \""+blurb[1]+ "\""
 		#print(executeLine)		
 		call(executeLine, shell=True)
 		blurbCount+= 1
