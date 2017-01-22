@@ -1,5 +1,6 @@
 import string
 from subprocess import call
+import sys
 
 voiceSettings = [" -vfemale1 -p 80 -s 200", #G(female)
 		 " -vfemale3 -p 60 -s 200", #C(female)
@@ -16,10 +17,14 @@ espeakPath = r'"C:\Program Files (x86)\eSpeak\command_line\espeak.exe" --path="C
 
 def readFile(conversationName):
 	
+	fileName = "Revolutionaries.html"
+	
+	if (len(sys.argv) > 1):
+		fileName = sys.argv[1]
 	
 	lines = []
 	currentConversationName = conversationName
-	f = open('../TwineSrc/Revolutionaries.html','r')
+	f = open('../TwineSrc/'+fileName,'r')
 	line = f.readline()
 	while len(line):
 		splitArray = str.split(line,'>')
