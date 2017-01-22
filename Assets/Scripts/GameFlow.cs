@@ -34,6 +34,18 @@ public class GameFlow : MonoBehaviour {
         TwineManager xTwineManager = gameObject.GetComponent<TwineManager>();
         xTwineManager.Begin(xCurrentRoomRadioController);
 
+        while(!xTwineManager.bGameFinished)
+        {
+        	yield return null;
+        }
 
+        Destroy(xCurrentRoomRadioController);
+
+        var xEndGameController = 
+        	mxRadioTextDisplayer.gameObject.AddComponent<EndGameController>();
+
+        xEndGameController.xTextDisplayer = mxRadioTextDisplayer;
+
+        yield return null;
 	}
 }

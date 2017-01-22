@@ -7,10 +7,17 @@ public class ConversationManager : MonoBehaviour {
 	List<AudioSource> maConversations = new List<AudioSource>();
 
 	int iPlayingConversation;
+
+	public int miActiveConversations
+	{
+		get;
+		private set;
+	}
 	
 	// Use this for initialization
 	void Start () {
 		iPlayingConversation = -1;
+		miActiveConversations = 0;
 	}
 
 	public int LoadConversation(Conversation xConvo)
@@ -20,6 +27,8 @@ public class ConversationManager : MonoBehaviour {
 		xAudioSource.mute = true;
 		maConversations.Add(xAudioSource);
 		StartCoroutine(PlayConversation(xConvo, xAudioSource));
+
+		++miActiveConversations;
 
 		return maConversations.Count - 1;
 	}
@@ -54,5 +63,7 @@ public class ConversationManager : MonoBehaviour {
 	 		xSource.Play();
 	 		yield return new WaitForSeconds(statement.length);
 	 	}
+
+	 	--miActiveConversations;
 	}
 }

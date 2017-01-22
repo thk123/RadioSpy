@@ -17,27 +17,52 @@ public class TwineManager : MonoBehaviour {
     	public AudioClip clip;
     }
     public ConversationManager mConversationManager;
-    public CurrentRoomRadioController mCurrentRoomController;
+    CurrentRoomRadioController mCurrentRoomController;
     public List<FillerEntry> maFillers;
+
+    public bool bGameFinished
+    {
+    	get;
+    	private set;
+    }
+
     Dictionary<string, AudioClip> mdFillerClips = new Dictionary<string, AudioClip>();
 
 	void Start () {
-        miCurrentDay = 1;
-		if(maFillers!=null)
+        if(maFillers!=null)
         {
         	foreach(FillerEntry entry in maFillers)
         	{
         		mdFillerClips.Add(entry.name, entry.clip);
         	}
         }
+	}
 
-        EndDay(Action.NoAction());        
+	// Update is called once per frame
+    void Update () {
+		if(mConversationManager.miActiveConversations == 0)		
+		{
+			bGameFinished = true;
+		}
+	}
+
+	public void Begin(CurrentRoomRadioController xCurrentRoomController)
+	{
+		bGameFinished = false;
+		mCurrentRoomController = xCurrentRoomController;
+		miCurrentDay = 1;
+        EndDay(Action.NoAction());
 	}
 
     public void EndDay(Action xActionTaken)
     {
-        Dictionary<string, Conversation> dRevConvs = LoadFlat("Revolutionaries", 2, miCurrentDay, xActionTaken);
+        EndDayForFlat(xActionTaken, "Revolutionaries", 2);
+        ++miCurrentDay;
+    }
 
+    void EndDayForFlat(Action xActionTaken, string sFlatName, int iFlatNumber)
+    {
+    	Dictionary<string, Conversation> dRevConvs = LoadFlat(sFlatName, iFlatNumber, miCurrentDay, xActionTaken);
         if(mConversationManager)
         {
         	foreach(KeyValuePair<string, Conversation> kvpConv in dRevConvs)
@@ -47,12 +72,11 @@ public class TwineManager : MonoBehaviour {
             	if(mCurrentRoomController)
         		{
     				print("Reegistering room " + kvpConv.Key + "  " + iChannel.ToString());
-        			mCurrentRoomController.RegisterChannel(iChannel, "Flat 2", kvpConv.Key);
+        			mCurrentRoomController.RegisterChannel(iChannel, "Flat " + iFlatNumber.ToString(), 
+        				kvpConv.Key);
     	    	}
         	}
         }
-
-        ++miCurrentDay;
     }
 
 	Dictionary<string, Conversation> LoadFlat(string sFlatName, int iFlatNumber, int iDay, Action xActionTaken)
@@ -231,9 +255,4 @@ public class TwineManager : MonoBehaviour {
         xCombinedConversation.aConversation = aAllClips.ToArray();
         return xCombinedConversation;
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }
