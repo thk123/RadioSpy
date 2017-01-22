@@ -68,7 +68,7 @@ public class RadioControls : MonoBehaviour
 
         if(xConversationManager != null)
         {
-            xConversationManager.LoadConversation(miChannel);
+            xConversationManager.TuneInToConversation(miChannel);
         }
     }
 }

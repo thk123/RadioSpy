@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Action : MonoBehaviour {
+public class Action {
 
 	public enum Names
 	{
@@ -15,7 +15,8 @@ public class Action : MonoBehaviour {
 		L,
 		N,
 		K, 
-		D
+		D,
+        None
 	};
 
 	static Dictionary<Names, int> Houses = new Dictionary<Names, int>(){
@@ -39,8 +40,8 @@ public class Action : MonoBehaviour {
 		Arrest
 	};
 
-	Names eTargetPerson;
-	Actions eAction;
+	public Names eTargetPerson;
+    public Actions eAction;
 
 	// Use this for initialization
 	void Start () {
@@ -61,9 +62,60 @@ public class Action : MonoBehaviour {
 			int iHouse = Houses[eTargetPerson];
 			return sAction + "-" + iHouse.ToString();
 		}
+        else if(eAction == Actions.None)
+        {
+            return "NONE";
+        }
 		else
 		{
-			return sAction + "-" + eTargetPerson.ToString();
+			return sAction + "-" + eTargetPerson.ToString().ToLower();
 		}
 	}
+
+    public override bool Equals(object obj)
+    {
+        if(obj is Action)
+        {
+            return ((Action)obj).GetActionTag() == GetActionTag();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Factory methods
+    public static Action NoAction()
+    {
+        return new Action { eTargetPerson = Names.None, eAction = Actions.None };
+    }
+
+    public static Action Raid(int iTargetHouse)
+    {
+        Names eName = Names.None;
+        foreach(KeyValuePair<Names, int> person in Houses)
+        {
+            if(person.Value == iTargetHouse)
+            {
+                eName = person.Key;
+                break;
+            }
+        }
+
+        if(eName == Names.None)
+        {
+            Debug.LogError("Couldn't find any person in house " + iTargetHouse);
+        }
+        return new Action { eTargetPerson = eName, eAction = Actions.Raid };
+    }
+
+    public static Action Follow(Names eName)
+    {
+        return new Action { eTargetPerson = eName, eAction = Actions.Follow };
+    }
+
+    public static Action Arrest(Names eName)
+    {
+        return new Action { eTargetPerson = eName, eAction = Actions.Arrest };
+    }
 }

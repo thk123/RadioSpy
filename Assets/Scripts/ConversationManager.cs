@@ -10,13 +10,10 @@ public class ConversationManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		LoadConversations((Conversation[]) Resources.FindObjectsOfTypeAll(typeof(Conversation)));
-		print("Loaded " + maConversations.Count + " conversations");
-		//LoadConversation(1);
 		iPlayingConversation = -1;
 	}
 
-	void LoadConversations(Conversation[] aConversations)
+	public void LoadConversations(Conversation[] aConversations)
 	{
 		maConversations = new List<AudioSource>();
 		print("Loading from " + aConversations.Length);
@@ -35,7 +32,7 @@ public class ConversationManager : MonoBehaviour {
 		
 	}
 
-	public void LoadConversation(int iHouseNumber)
+	public void TuneInToConversation(int iHouseNumber)
 	{
 		if(iHouseNumber != iPlayingConversation)
 		{

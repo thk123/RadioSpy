@@ -32,10 +32,11 @@ public class GenerateConversations
 			{
 				Conversation asset = ScriptableObject.CreateInstance<Conversation>();
 
-				string sFileName = sPassageName.Replace('.', '_');
+				string sFileName = sPassageName.Replace('.', '_').Replace(':','_');
+                asset.sConversationName = sFileName;
 
-        		AssetDatabase.CreateAsset(asset, 
-        			"Assets/Conversations/Generated/" + sFlatName + "/" + sFileName + ".asset");
+        		AssetDatabase.CreateAsset(asset,
+                    "Assets/Conversations/Resources/Generated/" + sFlatName + "/" + sFileName + ".asset");
 
 			}
 			else
