@@ -37,7 +37,7 @@ public class CurrentRoomRadioController : MonoBehaviour {
 		}
 		else
 		{
-			Debug.LogWarning("Unkown room for channel" + iChannel);
+			// Debug.LogWarning("Unkown room for channel" + iChannel);
 			xTextDisplayer.DisplayText("UNKNOWN", "UNKNOWN");
 		}
 	}

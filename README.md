@@ -6,7 +6,11 @@ You play the part of an intelligence agent working to disrupt a plot to assinate
 Credits
 -------
 
-TODO
+Iulian Arcus - Programming, Audio
+Sophie Collard - Writing
+Thomas Kiley - Programming and writing
+Richard Lai - Writing
+
 
 Contributions
 -------------
