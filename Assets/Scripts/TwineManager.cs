@@ -56,12 +56,16 @@ public class TwineManager : MonoBehaviour {
 
     public void EndDay(Action xActionTaken)
     {
+        EndDayForFlat(xActionTaken, "TheAffair", 1);
         EndDayForFlat(xActionTaken, "Revolutionaries", 2);
+        EndDayForFlat(xActionTaken, "FloristsStory", 3);
+
         ++miCurrentDay;
     }
 
     void EndDayForFlat(Action xActionTaken, string sFlatName, int iFlatNumber)
     {
+    	print("Ending flat for  " + sFlatName);
     	Dictionary<string, Conversation> dRevConvs = LoadFlat(sFlatName, iFlatNumber, miCurrentDay, xActionTaken);
         if(mConversationManager)
         {
@@ -122,7 +126,7 @@ public class TwineManager : MonoBehaviour {
 
                     string[] tags = xPassageNode.Attributes["tags"].Value.Split(new char[]{ ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
                     string sActionString = xActionTaken.GetActionTag();
-
+ 
                     bool bExactMatch = tags.Contains(sActionString) ||
                         tags.Length == 0 && xActionTaken.Equals(Action.NoAction());
 
@@ -174,15 +178,26 @@ public class TwineManager : MonoBehaviour {
 			float fMaxLength = 0.0f;
 			foreach(string sRoom in dChainOfConvos.Keys)
 			{
-				Conversation xConvoInRoomAtTime = dChainOfConvos[sRoom][i];
-				float fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
-				fMaxLength = Mathf.Max(fMaxLength, fDuration);
+				if(dChainOfConvos[sRoom][i] != null)
+				{
+					Conversation xConvoInRoomAtTime = dChainOfConvos[sRoom][i];
+					float fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
+					fMaxLength = Mathf.Max(fMaxLength, fDuration);
+				}
 			}
 
 			foreach(string sRoom in dChainOfConvos.Keys)
 			{
 				Conversation xConvoInRoomAtTime = dChainOfConvos[sRoom][i];
-				float fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
+				float fDuration = 0.0f;
+				if(xConvoInRoomAtTime != null)
+				{
+					fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
+				}
+				else
+				{
+					xConvoInRoomAtTime = ScriptableObject.CreateInstance<Conversation>();
+				}
 				float fFillerRequired = fMaxLength - fDuration;
 
 				if(fFillerRequired > 0.0f)
@@ -198,7 +213,11 @@ public class TwineManager : MonoBehaviour {
 
 					int iNumSeconds = (int)Mathf.Ceil(fFillerRequired / fillerClip.length );
 					
-					List<AudioClip> aFilledConvo = new List<AudioClip>(xConvoInRoomAtTime.aConversation);
+					List<AudioClip> aFilledConvo = new List<AudioClip>();
+					if(xConvoInRoomAtTime.aConversation != null)
+					{
+						aFilledConvo.AddRange(xConvoInRoomAtTime.aConversation);
+					}
 					aFilledConvo.AddRange(Enumerable.Repeat<AudioClip>(fillerClip, iNumSeconds));
 					xConvoInRoomAtTime.aConversation = aFilledConvo.ToArray();
 				}
@@ -225,7 +244,7 @@ public class TwineManager : MonoBehaviour {
 
     Conversation ProcessRoom(string sRoom, List<Conversation> aConversations)
     {
-        if (aConversations.Any(x => x == null)) 
+        /*if (aConversations.Any(x => x == null)) 
         {
             Debug.LogError("Room " + sRoom + " missing conversation indices:");
             int index = 0;
@@ -237,7 +256,7 @@ public class TwineManager : MonoBehaviour {
                 }
                 ++index;
             }
-        }
+        }*/
         List<AudioClip> aAllClips = new List<AudioClip>();
         foreach(Conversation xConv in aConversations)
         {

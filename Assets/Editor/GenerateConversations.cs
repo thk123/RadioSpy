@@ -13,6 +13,8 @@ public class GenerateConversations
     public static void CreateConversation()
     {
     	LoadConversationsForFlat("Revolutionaries");
+    	LoadConversationsForFlat("FloristsStory");
+    	LoadConversationsForFlat("TheAffair");
         AssetDatabase.SaveAssets();
     }
 
@@ -36,7 +38,7 @@ public class GenerateConversations
 				string sFileName = sPassageName.Replace('.', '_').Replace(':','_');
                 asset.sConversationName = sFileName;
 
-                string[] aAssetIds= AssetDatabase.FindAssets("", new string[]{"Assets/Audio/Dialogue/" + sFileName} );
+                string[] aAssetIds= AssetDatabase.FindAssets("", new string[]{"Assets/Audio/Dialogue/" + sFlatName + "/" + sFileName} );
                 Debug.Log("Found " + aAssetIds.Length + " clips for " + sFileName);
 
             	List<AudioClip> aConvos = new List<AudioClip>(aAssetIds.Length);
