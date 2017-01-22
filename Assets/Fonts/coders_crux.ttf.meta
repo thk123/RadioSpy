@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: f2e32f409e9308143aa0a5ca989f8ee9
+timeCreated: 1485084963
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Coder's Crux
+  fontNames:
+  - Coder's Crux
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
