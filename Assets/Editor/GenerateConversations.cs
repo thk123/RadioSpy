@@ -9,7 +9,9 @@ using UnityEditor;
 
 public class GenerateConversations
 {
-	[MenuItem("Assets/Generate/GenerateConversatiosn")]
+    const string sGeneratedConversationsFolder = "Assets/Conversations/Resources/Generated";
+
+    [MenuItem("Assets/Generate/GenerateConversations")]
     public static void CreateConversation()
     {
     	LoadConversationsForFlat("Revolutionaries");
@@ -20,6 +22,11 @@ public class GenerateConversations
 
     static void LoadConversationsForFlat(string sFlatName)
     {
+        if(!AssetDatabase.IsValidFolder(sGeneratedConversationsFolder + sFlatName))
+        {
+            AssetDatabase.CreateFolder(sGeneratedConversationsFolder, sFlatName);
+        }
+
     	XmlDocument xXml = new XmlDocument();
 		xXml.Load("Assets/Twine/" + sFlatName + ".html");
 		XmlNodeList xNodeList = xXml.GetElementsByTagName("tw-passagedata");
@@ -49,8 +56,8 @@ public class GenerateConversations
             	}
             	asset.aConversation = aConvos.ToArray();
 
-        		AssetDatabase.CreateAsset(asset,
-                    "Assets/Conversations/Resources/Generated/" + sFlatName + "/" + sFileName + ".asset");
+                AssetDatabase.CreateAsset(asset,
+                    string.Join("/", new string[] { sGeneratedConversationsFolder, sFlatName, sFileName + ".asset" }));
 			}
 			else
 			{
