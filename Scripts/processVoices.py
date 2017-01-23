@@ -28,17 +28,11 @@ speakerMapping = dict(
     				})
 espeakPath = r'"C:\Program Files (x86)\eSpeak\command_line\espeak.exe" --path="C:\Program Files (x86)\eSpeak" '
 
-def readFile(conversationName):
-	
-	fileName = "Revolutionaries.html"
-	
-	if (len(sys.argv) > 1):
-		fileName = sys.argv[1]
-	
+def readFile(fileName):
 	fileNameStripped = fileName.split('.')
 	
 	lines = []
-	currentConversationName = conversationName
+	currentConversationName = "ConversationA"
 	f = open('../TwineSrc/'+fileName,'r')
 	line = f.readline()
 	while len(line):
@@ -76,7 +70,11 @@ def readFile(conversationName):
 		call(executeLine, shell=True)
 		blurbCount+= 1
 		
-	
 
-readFile("ConversationA")
+if (len(sys.argv) > 1):
+	readFile(sys.argv[1])
+else:
+	readFile("TheAffair.html")
+	readFile("Revolutionaries.html")
+	readFile("FloristsStory.html")
 
