@@ -85,8 +85,9 @@ public class TwineManager : MonoBehaviour {
 
 	Dictionary<string, Conversation> LoadFlat(string sFlatName, int iFlatNumber, int iDay, Action xActionTaken)
 	{
-		XmlDocument xXml = new XmlDocument();
-		xXml.Load("Assets/Twine/" + sFlatName + ".html");
+        TextAsset textAsset = (TextAsset)Resources.Load(sFlatName + ".html");
+        XmlDocument xXml = new XmlDocument();
+        xXml.LoadXml(textAsset.text);
 		XmlNodeList xNodeList = xXml.GetElementsByTagName("tw-passagedata");
 		
 		Regex xNameMatcher = new Regex(@"^(?<day>\d+)\.(?<section>\d+):(?<room>[a-zA-Z]+)\d*");

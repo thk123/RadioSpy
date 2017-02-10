@@ -28,7 +28,7 @@ public class GenerateConversations
         }
 
     	XmlDocument xXml = new XmlDocument();
-		xXml.Load("Assets/Twine/" + sFlatName + ".html");
+		xXml.Load("Assets/Twine/Resources/" + sFlatName + ".html.xml");
 		XmlNodeList xNodeList = xXml.GetElementsByTagName("tw-passagedata");
 		
 		Regex xNameMatcher = new Regex(@"^(?<day>\d+)\.(?<section>\d+):(?<room>\w+)\d*");
