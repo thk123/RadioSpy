@@ -182,7 +182,7 @@ public class TwineManager : MonoBehaviour {
 				if(dChainOfConvos[sRoom][i] != null)
 				{
 					Conversation xConvoInRoomAtTime = dChainOfConvos[sRoom][i];
-					float fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
+					float fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x != null ? x.length : 0.0f);
 					fMaxLength = Mathf.Max(fMaxLength, fDuration);
 				}
 			}
@@ -193,7 +193,7 @@ public class TwineManager : MonoBehaviour {
 				float fDuration = 0.0f;
 				if(xConvoInRoomAtTime != null)
 				{
-					fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x.length);
+					fDuration = xConvoInRoomAtTime.aConversation.Sum(x => x != null ? x.length : 0.0f);
 				}
 				else
 				{
