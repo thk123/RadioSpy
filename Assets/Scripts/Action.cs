@@ -6,21 +6,21 @@ public class Action {
 
 	public enum Names
 	{
-		A,
-		R,
-		M,
+		G,
 		C,
-		G, 
-		F, 
+		V,
+		F,
+		R, 
+		A, 
 		L,
-		N,
-		K, 
 		D,
+		M, 
+		K,
         None
 	};
 
 	static Dictionary<Names, int> Houses = new Dictionary<Names, int>(){
-		{Names.A, 1},
+		/*{Names.A, 1},
 		{Names.R, 1},
 		{Names.M, 1},
 		{Names.C, 2},
@@ -29,7 +29,8 @@ public class Action {
 		{Names.L, 2},
 		{Names.N, 3},
 		{Names.K, 3},
-		{Names.D, 3},
+		{Names.D, 3},*/
+		// TODO: not being used but should link names to houses
 	};
 
 	public enum Actions
