@@ -28,12 +28,12 @@ public class CurrentRoomRadioController : MonoBehaviour {
 		dRegistedRooms[iChannel] = new Room { sFlat = sFlat, sRoom = sRoom };
 	}
 
-	public void DisplayChannel(int iChannel)
+	public void DisplayChannel(int iChannel, Action.Names eSpeaker)
 	{
 		if(dRegistedRooms.ContainsKey(iChannel))
 		{	
 			Room sSelectedRoom = dRegistedRooms[iChannel];
-			xTextDisplayer.DisplayText(sSelectedRoom.sFlat, sSelectedRoom.sRoom);
+			xTextDisplayer.DisplayText(sSelectedRoom.sFlat + " - " + sSelectedRoom.sRoom, "Speaker: " + eSpeaker.ToString());
 		}
 		else
 		{

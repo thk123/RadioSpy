@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ConversationManager : MonoBehaviour {
 
 	List<AudioSource> maConversations = new List<AudioSource>();
+    List<Action.Names> maCurrentSpeaker = new List<Action.Names>();
 
 	int iPlayingConversation;
 
@@ -13,6 +15,10 @@ public class ConversationManager : MonoBehaviour {
 		get;
 		private set;
 	}
+
+    public delegate void SpeakerChangedEvent(int iRoomIndex, Action.Names eNewSpeaker);
+
+    public event SpeakerChangedEvent OnSpeakerChanged;
 	
 	// Use this for initialization
 	void Start () {
@@ -26,7 +32,8 @@ public class ConversationManager : MonoBehaviour {
 		AudioSource xAudioSource = xAudioSourceObject.AddComponent<AudioSource>();
 		xAudioSource.mute = true;
 		maConversations.Add(xAudioSource);
-		StartCoroutine(PlayConversation(xConvo, xAudioSource));
+        maCurrentSpeaker.Add(Action.Names.None);
+        StartCoroutine(PlayConversation(xConvo, xAudioSource, maConversations.Count - 1));
 
 		++miActiveConversations;
 
@@ -55,15 +62,27 @@ public class ConversationManager : MonoBehaviour {
 		}
 	}
 
-	IEnumerator PlayConversation(Conversation xConversation, AudioSource xSource) 
+	IEnumerator PlayConversation(Conversation xConversation, AudioSource xSource, int iHouseNumber) 
 	{
+        int iIndex = 0;
+        
 	 	foreach(AudioClip statement in xConversation.aConversation)
 	 	{
 	 		xSource.clip = statement;
 	 		xSource.Play();
+            maCurrentSpeaker[iHouseNumber] = xConversation.aSpeaker[iIndex];
+            OnSpeakerChanged(iHouseNumber, xConversation.aSpeaker[iIndex]);
+
 	 		yield return new WaitForSeconds(statement.length);
+
+            ++iIndex;
 	 	}
 
 	 	--miActiveConversations;
 	}
+
+    public Action.Names GetCurrentSpeaker(int iRoomIndex)
+    {
+        return maCurrentSpeaker[iRoomIndex];
+    }
 }

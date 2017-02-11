@@ -215,12 +215,17 @@ public class TwineManager : MonoBehaviour {
 					int iNumSeconds = (int)Mathf.Ceil(fFillerRequired / fillerClip.length );
 					
 					List<AudioClip> aFilledConvo = new List<AudioClip>();
+                    List<Action.Names> aFilledPeople = new List<Action.Names>();
 					if(xConvoInRoomAtTime.aConversation != null)
 					{
 						aFilledConvo.AddRange(xConvoInRoomAtTime.aConversation);
+                        aFilledPeople.AddRange(xConvoInRoomAtTime.aSpeaker);
+
 					}
 					aFilledConvo.AddRange(Enumerable.Repeat<AudioClip>(fillerClip, iNumSeconds));
+                    aFilledPeople.AddRange(Enumerable.Repeat<Action.Names>(Action.Names.None, iNumSeconds));
 					xConvoInRoomAtTime.aConversation = aFilledConvo.ToArray();
+                    xConvoInRoomAtTime.aSpeaker = aFilledPeople.ToArray();
 				}
 
 			}
@@ -259,6 +264,7 @@ public class TwineManager : MonoBehaviour {
             }
         }*/
         List<AudioClip> aAllClips = new List<AudioClip>();
+        List<Action.Names> aAllSpeakers = new List<Action.Names>();
         foreach(Conversation xConv in aConversations)
         {
             if (xConv != null) 
@@ -266,13 +272,16 @@ public class TwineManager : MonoBehaviour {
                 if(xConv.aConversation == null)
                 {
                     xConv.aConversation = new AudioClip[] { };
+                    xConv.aSpeaker = new Action.Names[] { };
                 }
                 aAllClips.AddRange(xConv.aConversation);
+                aAllSpeakers.AddRange(xConv.aSpeaker);
             }
         }
 
         Conversation xCombinedConversation = ScriptableObject.CreateInstance<Conversation>();
         xCombinedConversation.aConversation = aAllClips.ToArray();
+        xCombinedConversation.aSpeaker = aAllSpeakers.ToArray();
         return xCombinedConversation;
     }
 }

@@ -25,7 +25,22 @@ public class RadioControls : MonoBehaviour
     {
         mxKnob = GameObject.Find("Knob");
         mxRadioIndicator = GameObject.Find("RadioIndicator");
+        if(xConversationManager != null)
+        {
+            xConversationManager.OnSpeakerChanged += XConversationManager_OnSpeakerChanged;
+            
+        }
+    }
 
+    private void XConversationManager_OnSpeakerChanged(int iRoomIndex, Action.Names eNewSpeaker)
+    {
+        if(miChannel == iRoomIndex)
+        {
+            if (xChannelDisplayer != null)
+            {
+                xChannelDisplayer.DisplayChannel(miChannel, eNewSpeaker);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -70,9 +85,10 @@ public class RadioControls : MonoBehaviour
         if(xConversationManager != null)
         {
             xConversationManager.TuneInToConversation(miChannel);
-            if(xChannelDisplayer != null)
+
+            if (xChannelDisplayer != null)
             {
-                xChannelDisplayer.DisplayChannel(miChannel);
+                xChannelDisplayer.DisplayChannel(miChannel, xConversationManager.GetCurrentSpeaker(miChannel));
             }
         }
     }
